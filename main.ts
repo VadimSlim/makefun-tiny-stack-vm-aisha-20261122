@@ -25,7 +25,7 @@ fs.readdirSync(inputRoot).forEach(dir => {
     fs.writeFileSync(stdoutBinPath, '');
 
     const exitTxtPath = path.join(outputDirPath, 'exit.txt');
-const exitCode = (() => { let pc = 0, stack = [], output = []; const memory = new Int32Array(256); const callStack = []; const inputBytes = fs.readFileSync(path.join(dirPath, "input.bin")); let inputPos = 0; let steps = 0; while (true) { if (++steps > 1000000) return 10; if (pc < 0 || pc >= programBinContent.length) return 9;
+let output = []; const exitCode = (() => { let pc = 0, stack = []; const memory = new Int32Array(256); const callStack = []; const inputBytes = fs.readFileSync(path.join(dirPath, "input.bin")); let inputPos = 0; let steps = 0; while (true) { if (++steps > 1000000) return 10; if (pc < 0 || pc >= programBinContent.length) return 9;
   const op = programBinContent[pc++];
   switch(op) {
     case 0x00: return 0;
@@ -73,6 +73,7 @@ output.splice(output.length-1, 1);
 fs.writeFileSync(stdoutBinPath,Buffer.from(output));
 return 9; 
 })();
+fs.writeFileSync(stdoutBinPath, Buffer.from(output));
 fs.writeFileSync(exitTxtPath, String(exitCode) + String.fromCharCode(10));
 return;
     fs.writeFileSync(exitTxtPath, '0\n');
